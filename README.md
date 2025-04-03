@@ -17,8 +17,6 @@ The advancement of image editing technologies has made it easier to create convi
 1. **Regeneration Network:** Uses parallel encoder paths for each CDM channel (R-G, G-B, R-B), followed by a dense module with scale blocks and a decoder with skip connections.
 2. **Detection Network:** Transfers encoder weights from the regeneration network, processes features through a residual block, and outputs a binary classification (real vs. fake).
 
-## Installation
-
 ### Prerequisites
 - Python 3.8+
 - TensorFlow 2.x

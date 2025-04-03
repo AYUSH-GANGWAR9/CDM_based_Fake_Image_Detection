@@ -36,10 +36,7 @@ np.random.seed(42)
 
 tf.random.set_seed(42)
 
-
-
 def main(data_path, batch_size=16, img_size=(256,256), epochs_regen=50, epochs_detect=50):
-
     # 1. Load data paths
     
     print("Loading data paths...")
