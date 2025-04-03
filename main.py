@@ -1,52 +1,93 @@
 import os
+
 import glob
+
 import numpy as np
+
 import tensorflow as tf
+
 from tensorflow.keras.models import load_model
+
 from tensorflow.keras.losses import MeanSquaredError
+
 import argparse
 
 # Import functions from our modules
+
 from src.data_utils import create_data_generators
+
 from src.models import build_regeneration_network, build_detection_network, custom_create_cdm
+
 from src.training import train_regeneration_network, train_detection_network, transfer_encoder_weights
+
 from src.evaluation import evaluate_model, predict_image
+
 from src.visualization import plot_training_history, plot_confusion_matrix, plot_roc_curve
+
 from src.cdm_utils import visualize_cdm
 
 # Print available devices (optional)
+
 print("TensorFlow devices:", tf.config.list_physical_devices())
 
 # Set random seeds for reproducibility
+
 np.random.seed(42)
+
 tf.random.set_seed(42)
 
-def main(data_path, batch_size=16, img_size=(256,25 6), epochs_regen=50, epochs_detect=50):
+def main(data_path, batch_size=16, img_size=(256,256), epochs_regen=50, epochs_detect=50):
     # 1. Load data paths
+    
     print("Loading data paths...")
+    
     real_image_paths = glob.glob(os.path.join(data_path, "real", "*.[jJ][pP][gG]"))
+    
     fake_image_paths = glob.glob(os.path.join(data_path, "fake", "*.[jJ][pP][gG]"))
+    
     if len(real_image_paths) == 0 or len(fake_image_paths) == 0:
+    
         print(f"Error: No images found in {data_path}")
+        
         return
 
+    
+    
     print(f"Found {len(real_image_paths)} real images and {len(fake_image_paths)} fake images")
+
+    
     
     # 2. Create data generators
+    
     print("Creating data generators...")
+    
     train_gen, val_gen, train_det_gen, val_det_gen, train_steps, val_steps = create_data_generators(
+    
         real_image_paths, fake_image_paths, batch_size=batch_size
     )
     
+
+    
+    
     # 3. Build and train regeneration network (autoencoder)
+    
     print("Building regeneration network...")
+    
     regen_model, encoder_outputs = build_regeneration_network(input_shape=(*img_size, 3))
+    
     regen_model.summary()
+
+    
     
     print("Training regeneration network...")
+    
     regen_history, trained_regen_model = train_regeneration_network(
+    
         regen_model, train_gen, val_gen, train_steps, val_steps, epochs=epochs_regen, batch_size=batch_size
     )
+    
+
+    
     
     # Plot regeneration network training history
     os.makedirs("outputs/results", exist_ok=True)

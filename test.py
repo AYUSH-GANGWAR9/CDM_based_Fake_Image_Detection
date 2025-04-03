@@ -7,13 +7,17 @@ from src.cdm_utils import create_cdm
 from src.models import custom_create_cdm
 
 def main(test_image, img_size):
+    
     # Set the default detection model path
     model_path = "outputs/models/detection_model.h5"
     
     # Load the detection model with custom_objects so that the custom Lambda functions are resolved.
     detect_model = load_model(model_path, custom_objects={
+        
         'custom_create_cdm': custom_create_cdm,
+        
         'create_cdm': create_cdm,
+        
         'MSE': MeanSquaredError()
     })
     
