@@ -21,7 +21,7 @@ print("TensorFlow devices:", tf.config.list_physical_devices())
 np.random.seed(42)
 tf.random.set_seed(42)
 
-def main(data_path, batch_size=16, img_size=(256,256), epochs_regen=50, epochs_detect=50):
+def main(data_path, batch_size=16, img_size=(256,25 6), epochs_regen=50, epochs_detect=50):
     # 1. Load data paths
     print("Loading data paths...")
     real_image_paths = glob.glob(os.path.join(data_path, "real", "*.[jJ][pP][gG]"))
